@@ -10,6 +10,11 @@ export interface InputSignUp {
   password: string;
 }
 
+export interface InputForgotPass {
+  email: string;
+  newPassword: string;
+}
+
 export interface AuthToken {
   accesToken: string;
 }

@@ -3,6 +3,7 @@ export interface ExpenseType {
   type: string;
   category: string;
   amount: number;
+  favourite: 'default' | 'favourite';
   createdAt: Date;
 }
 

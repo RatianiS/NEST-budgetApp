@@ -8,14 +8,17 @@ export type CatDocument = HydratedDocument<Expense>;
   timestamps: true,
 })
 export class Expense {
-  @Prop()
+  @Prop({ required: true })
   amount: number;
 
-  @Prop()
+  @Prop({ required: true })
   type: string;
 
-  @Prop()
+  @Prop({ required: true })
   category: string;
+
+  @Prop({ default: 'default' })
+  status: 'default' | 'favourite';
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   userId: User;
