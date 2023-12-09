@@ -56,4 +56,46 @@ export class ExpenseService {
     );
     return 'expense updated';
   }
+
+  async favouriteExpense(expenseId: string) {
+    const expense = await this.expenseModel.findOne({ _id: expenseId });
+    // console.log(expense);
+
+    if (!expense) {
+      throw new BadRequestException('User not found');
+    }
+
+    expense.status = 'favourite';
+
+    await expense.save();
+    console.log(expense);
+
+    return 'expense favourited';
+  }
+
+  async filterData(
+    userId: string,
+    min: number,
+    max: number,
+    category: string,
+    type: string,
+    dateStart: string,
+    dateEnd: string,
+  ) {
+    const expenses: ExpenseType[] = await this.expenseModel.find({ userId });
+
+    const search = expenses.filter((exp) => {
+      const dateMatched =
+        (!dateStart || Date.parse(exp.createdAt) > Date.parse(dateStart)) &&
+        (!dateEnd || Date.parse(exp.createdAt) < Date.parse(dateEnd));
+      const categorymatched =
+        !category || exp.category.toLowerCase() === category.toLowerCase();
+      const typeMatched =
+        !type || exp.type.toLowerCase() === type.toLowerCase();
+      const minAndMaxMAtched =
+        (!min || +exp.amount > +min) && (!max || +exp.amount < +max);
+      return categorymatched && typeMatched && minAndMaxMAtched && dateMatched;
+    });
+    return search;
+  }
 }

@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -36,18 +37,47 @@ export class ExpenseController {
     return this.ExpenseService.addExpense(req.userId, input);
   }
 
-  @UseGuards(AuthGuard,OwnerGuard)
+  @UseGuards(AuthGuard, OwnerGuard)
   @Delete('/:expenseId')
   deleteExpense(@Param('expenseId') expenseId: string) {
     return this.ExpenseService.deleteExpense(expenseId);
   }
 
-  @UseGuards(AuthGuard,OwnerGuard)
+  @UseGuards(AuthGuard, OwnerGuard)
   @Put('/:expenseId')
   editExpense(
     @Param('expenseId') expenseId: string,
     @Body() input: expenseEditInput,
   ) {
     return this.ExpenseService.editExpense(expenseId, input);
+  }
+
+  @UseGuards(AuthGuard, OwnerGuard)
+  @Post('favourite/:expenseId')
+  favouriteExpense(@Param('expenseId') expenseId: string) {
+    return this.ExpenseService.favouriteExpense(expenseId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/filter')
+  filterData(
+    @Req() req: AppRequest,
+    @Query('min') min: number,
+    @Query('max') max: number,
+    @Query('type') type: string,
+    @Query('category') category: string,
+    @Query('dateStart') dateStart: string,
+    @Query('dateEnd') dateEnd: string,
+  ) {
+    const filteredData = this.ExpenseService.filterData(
+      req.userId,
+      min,
+      max,
+      type,
+      category,
+      dateStart,
+      dateEnd,
+    );
+    return filteredData;
   }
 }

@@ -4,7 +4,7 @@ export interface ExpenseType {
   category: string;
   amount: number;
   favourite: 'default' | 'favourite';
-  createdAt: Date;
+  createdAt: string;
 }
 
 export interface InputAddExpense {
